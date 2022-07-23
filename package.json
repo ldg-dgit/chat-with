@@ -1,0 +1,30 @@
+{
+  "name": "call-with",
+  "version": "1.0.0",
+  "description": "Real Time Videotelephony Communication Platform",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ldg-dgit/call-with.git"
+  },
+  "keywords": [],
+  "author": "ldg@dgit.co",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon"
+  },
+  "bugs": {
+    "url": "https://github.com/ldg-dgit/call-with/issues"
+  },
+  "homepage": "https://github.com/ldg-dgit/call-with#readme",
+  "dependencies": {
+    "@babel/cli": "^7.18.9",
+    "@babel/core": "^7.18.9",
+    "@babel/node": "^7.18.9",
+    "nodemon": "^2.0.19"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.18.9",
+    "express": "^4.18.1",
+    "pug": "^3.0.2"
+  }
+}
