@@ -20,7 +20,11 @@ const httpServer = http.createServer(app);
 const socketioServer = SocketIO(httpServer);
 
 socketioServer.on("connection", (socket) => {
-  console.log(socket);
+  socket.on("enter_room", (roomName, showRoom) => {
+    socket.join(roomName);
+    showRoom();
+    socket.to(roomName).emit("welcome");
+  });
 });
 
 /*

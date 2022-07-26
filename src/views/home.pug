@@ -10,7 +10,17 @@ html(lang="en")
         header 
             h1 Call with 
         main 
-            
+            div#welcome
+                form
+                    input(placeholder="Room Name", required, type="text")
+                    button Enter Room
+
+            div#room
+                form
+                    h3
+                    ul
+                    input(placeholder="Write a message", required, type="text")
+                    button Send
 
         script(src="/socket.io/socket.io.js")
         script(src="/public/js/app.js")
