@@ -10,6 +10,12 @@ html(lang="en")
         header 
             h1 Talk with 
         main 
-            h2 Welcome to Talk with 
-            
+            form#nickname
+                input(type="text", placeholder="choose a nickname", require)
+                button Save
+            ul
+            form#message
+                input(type="text", placeholder="write a message", require)
+                button Send
+
         script(src="/public/js/app.js")
