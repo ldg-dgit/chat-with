@@ -1,5 +1,5 @@
 import http from "http";
-
+import SocketIO from "socket.io";
 import express from "express";
 
 const app = express();
@@ -16,15 +16,14 @@ const PORT = 3000;
 
 const handleListening = () => console.log(`✅ Server listenting on http://localhost:${PORT} 🚀`);
 
-const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
+const httpServer = http.createServer(app);
+const socketioServer = SocketIO(httpServer);
 
-function onSocketClose() {
-  console.log("❌ Disconnected to Browser 🕋");
-}
+socketioServer.on("connection", (socket) => {
+  console.log(socket);
+});
 
 /*
-
 const sockets = [];
 
 wss.on("connection", (socket) => {
@@ -42,7 +41,6 @@ wss.on("connection", (socket) => {
     }
   });
 });
-
 */
 
-server.listen(3000, handleListening);
+httpServer.listen(3000, handleListening);
