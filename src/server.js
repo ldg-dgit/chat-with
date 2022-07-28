@@ -18,19 +18,26 @@ const httpServer = http.createServer(app);
 const socketioServer = SocketIO(httpServer);
 
 socketioServer.on("connection", (socket) => {
+  socket["username"] = "Anonymous";
   socket.onAny((event) => {
     console.log(`Socket Event : ${event}`);
   });
   socket.on("enter_room", (roomName, showRoom) => {
     socket.join(roomName);
     showRoom();
-    socket.to(roomName).emit("welcome");
+    socket.to(roomName).emit("roomname", socket.username);
   });
   socket.on("disconnecting", () => {
-    socket.rooms.forEach((room) => socket.to(room).emit("bye"));
+    socket.rooms.forEach((room) =>
+      socket.to(room).emit("bye", socket.username)
+    );
   });
-  socket.on("message", (msg, room, done) => {
-    socket.to(room).emit("message", msg);
+  socket.on("message", (message, room, done) => {
+    socket.to(room).emit("message", `${socket.username} : ${message}`);
+    done();
+  });
+  socket.on("username", (username, done) => {
+    socket["username"] = username;
     done();
   });
 });
@@ -59,6 +66,7 @@ wss.on("connection", (socket) => {
 });
 */
 
-const handleListen = () => console.log(`✅ Server listenting on http://localhost:${PORT} 🚀`);
+const handleListen = () =>
+  console.log(`✅ Server listenting on http://localhost:${PORT} 🚀`);
 
 httpServer.listen(PORT, handleListen);
