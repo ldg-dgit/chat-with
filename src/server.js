@@ -32,17 +32,20 @@ function publicRooms() {
   return publicRooms;
 }
 
+function countUser(roomName) {
+  return socketioServer.sockets.adapter.rooms.get(roomName)?.size;
+}
+
 socketioServer.on("connection", (socket) => {
   socket["username"] = "Anonymous";
-
   socket.on("enter_room", (roomName, showRoom) => {
     socket.join(roomName);
     showRoom();
-    socket.to(roomName).emit("roomname", socket.username);
+    socket.to(roomName).emit("roomname", socket.username, countUser(roomName));
     socketioServer.sockets.emit("room_change", publicRooms());
   });
   socket.on("disconnecting", () => {
-    socket.rooms.forEach((room) => socket.to(room).emit("bye", socket.username));
+    socket.rooms.forEach((room) => socket.to(room).emit("bye", socket.username, countUser(room) - 1));
   });
   socket.on("disconnecting", () => {
     socketioServer.sockets.emit("room_change", publicRooms());

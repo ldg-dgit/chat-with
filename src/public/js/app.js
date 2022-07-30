@@ -60,11 +60,15 @@ function handleNameSubmit(event) {
 
 usernameForm.addEventListener("submit", handleNameSubmit);
 
-socket.on("roomname", (username) => {
+socket.on("roomname", (username, newCount) => {
+  const h3 = room.querySelector("h3");
+  h3.innerText = `Room : ${roomName} (${newCount} users)`;
   addMessage(`${username} joined!`);
 });
 
-socket.on("bye", (username) => {
+socket.on("bye", (username, newCount) => {
+  const h3 = room.querySelector("h3");
+  h3.innerText = `Room : ${roomName} (${newCount} users)`;
   addMessage(`${username} left.`);
 });
 
