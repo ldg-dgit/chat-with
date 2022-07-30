@@ -17,20 +17,35 @@ app.get("/*", (_, res) => res.redirect("/"));
 const httpServer = http.createServer(app);
 const socketioServer = SocketIO(httpServer);
 
+function publicRooms() {
+  const {
+    sockets: {
+      adapter: { sids, rooms },
+    },
+  } = socketioServer;
+  const publicRooms = [];
+  rooms.forEach((_, key) => {
+    if (sids.get(key) === undefined) {
+      publicRooms.push(key);
+    }
+  });
+  return publicRooms;
+}
+
 socketioServer.on("connection", (socket) => {
   socket["username"] = "Anonymous";
-  socket.onAny((event) => {
-    console.log(`Socket Event : ${event}`);
-  });
+
   socket.on("enter_room", (roomName, showRoom) => {
     socket.join(roomName);
     showRoom();
     socket.to(roomName).emit("roomname", socket.username);
+    socketioServer.sockets.emit("room_change", publicRooms());
   });
   socket.on("disconnecting", () => {
-    socket.rooms.forEach((room) =>
-      socket.to(room).emit("bye", socket.username)
-    );
+    socket.rooms.forEach((room) => socket.to(room).emit("bye", socket.username));
+  });
+  socket.on("disconnecting", () => {
+    socketioServer.sockets.emit("room_change", publicRooms());
   });
   socket.on("message", (message, room, done) => {
     socket.to(room).emit("message", `${socket.username} : ${message}`);
@@ -66,7 +81,6 @@ wss.on("connection", (socket) => {
 });
 */
 
-const handleListen = () =>
-  console.log(`✅ Server listenting on http://localhost:${PORT} 🚀`);
+const handleListen = () => console.log(`✅ Server listenting on http://localhost:${PORT} 🚀`);
 
 httpServer.listen(PORT, handleListen);
