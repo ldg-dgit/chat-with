@@ -1,3 +1,3 @@
-# call-with
+# chat-with
 
-Real Time Videotelephony Communication Platform with WebRTC, WebSocket.
+Real Time Chatting Platform with SocketIO.
